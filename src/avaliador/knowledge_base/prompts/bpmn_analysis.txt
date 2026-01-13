@@ -1,0 +1,25 @@
+Voce esta analisando um diagrama de processo de uma documentacao de implantacao de ERP TOTVS Protheus.
+
+ANALISE O DIAGRAMA E FORNECA:
+
+1. **TIPO DE DIAGRAMA**: (Fluxograma simples / BPMN / Swimlane / Outro)
+
+2. **ESTRUTURA**:
+   - Evento de inicio: [Sim/Nao] - Descricao se houver
+   - Evento de fim: [Sim/Nao] - Descricao se houver
+   - Gateways de decisao: [Quantidade] - Liste as condicoes se visiveis
+
+3. **RESPONSAVEIS** (se houver swimlanes/raias):
+   - Liste os atores/departamentos identificados
+
+4. **ATIVIDADES PRINCIPAIS**:
+   - Liste as principais tarefas/atividades do fluxo (maximo 10)
+
+5. **FLUXO LOGICO**:
+   - O fluxo tem sequencia logica clara? [Sim/Parcial/Nao]
+   - Ha conexoes quebradas ou ambiguas? [Sim/Nao]
+
+6. **QUALIDADE GERAL**: [Alta/Media/Baixa]
+   - Justificativa em uma frase
+
+Seja objetivo e conciso. Foque em elementos auditaveis.

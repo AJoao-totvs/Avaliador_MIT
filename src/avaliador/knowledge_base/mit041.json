@@ -1,0 +1,102 @@
+{
+  "mit_type": "MIT041",
+  "name": "Desenho da Solucao / Blueprint",
+  "version": "2.0.0",
+  "minimum_passing_score": 8.0,
+  "pillars": [
+    {
+      "id": "P1",
+      "name": "Completude Estrutural",
+      "weight": 0.30,
+      "criteria": [
+        {
+          "id": "P1.1",
+          "name": "Metadados do Projeto",
+          "description": "Tabela inicial com cliente, codigo do projeto, nome do projeto",
+          "weight": 0.15
+        },
+        {
+          "id": "P1.2",
+          "name": "Historico de Versoes",
+          "description": "Tabela com Data, Versao, Autor, Descricao da mudanca",
+          "weight": 0.15
+        },
+        {
+          "id": "P1.3",
+          "name": "Lista de Participantes",
+          "description": "Tabela com nome e area de atuacao de cada participante",
+          "weight": 0.15
+        },
+        {
+          "id": "P1.4",
+          "name": "Descricao AS IS",
+          "description": "Secao descrevendo a situacao atual do cliente antes da implantacao",
+          "weight": 0.20
+        },
+        {
+          "id": "P1.5",
+          "name": "Cobertura de Processos",
+          "description": "Secoes para cada processo do modulo com headings estruturados",
+          "weight": 0.35
+        }
+      ]
+    },
+    {
+      "id": "P2",
+      "name": "Qualidade das Regras e Fluxos",
+      "weight": 0.40,
+      "criteria": [
+        {
+          "id": "P2.1",
+          "name": "Descricao de Processos",
+          "description": "Cada processo deve ter: Objetivos, Origens, Fatores Criticos, Restricoes, Saidas",
+          "weight": 0.25
+        },
+        {
+          "id": "P2.2",
+          "name": "Criterios de Aceitacao",
+          "description": "Tabela com Processo, Subprocesso, Descricao, Situacao Esperada",
+          "weight": 0.25
+        },
+        {
+          "id": "P2.3",
+          "name": "Tabela de GAPs",
+          "description": "Tabela com ID, Processo, Descricao, Situacao Esperada, Contorno",
+          "weight": 0.20
+        },
+        {
+          "id": "P2.4",
+          "name": "Diagramas BPMN",
+          "description": "Diagramas com: eventos inicio/fim, gateways documentados, swimlanes com responsaveis",
+          "weight": 0.30,
+          "requires_vision": true
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "name": "Governanca e Aceite",
+      "weight": 0.30,
+      "criteria": [
+        {
+          "id": "P3.1",
+          "name": "Tabela de Aceite",
+          "description": "Lista de aprovadores com nome, cargo, empresa e espaco para assinatura",
+          "weight": 0.40
+        },
+        {
+          "id": "P3.2",
+          "name": "Premissas e Restricoes",
+          "description": "Secao dedicada documentando premissas e restricoes do projeto",
+          "weight": 0.30
+        },
+        {
+          "id": "P3.3",
+          "name": "Definicao de Escopo",
+          "description": "Escopo claramente definido na estrategia de implementacao",
+          "weight": 0.30
+        }
+      ]
+    }
+  ]
+}

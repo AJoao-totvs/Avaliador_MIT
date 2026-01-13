@@ -1,0 +1,29 @@
+# Avaliador de MITs TOTVS - Dependencies
+# Generated from pyproject.toml
+
+# Document Processing
+docling>=2.68.0
+
+# LLM Client
+openai>=1.30.0
+
+# CLI
+typer[all]>=0.12.0
+rich>=13.0.0
+
+# Data Validation
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# Environment
+python-dotenv>=1.0.0
+
+# Development (optional - install with: pip install -r requirements-dev.txt)
+# pytest>=8.0.0
+# pytest-asyncio>=0.23.0
+# pytest-cov>=5.0.0
+# ruff>=0.4.0
+# mypy>=1.10.0
+
+# Future MCP Support (optional - install with: pip install fastmcp)
+# fastmcp>=2.14.0
