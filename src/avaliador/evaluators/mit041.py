@@ -12,7 +12,8 @@ from typing import Optional
 from avaliador.config import settings
 from avaliador.evaluators.base import BaseEvaluator
 from avaliador.knowledge_base.loader import get_prompt, load_criteria
-from avaliador.llm.dta_client import DTAProxyClient
+from avaliador.knowledge_base.references import get_reference_prompt
+from avaliador.llm import DTAError, DTAProxyClient
 from avaliador.models.schemas import (
     EvaluationMetadata,
     EvaluationResult,
@@ -37,15 +38,22 @@ class MIT041Evaluator(BaseEvaluator):
     mit_type = MITType.MIT041
     min_passing_score = 8.0
 
-    def __init__(self, llm_client: Optional[DTAProxyClient] = None):
+    def __init__(
+        self,
+        llm_client: Optional[DTAProxyClient] = None,
+        use_references: bool = True,
+    ):
         """
         Initialize MIT041 evaluator.
 
         Args:
             llm_client: DTA Proxy client. Created automatically if not provided.
+            use_references: Whether to include good MIT samples as reference examples.
         """
         self._llm_client = llm_client
         self._criteria = None
+        self.use_references = use_references
+        self._reference_prompt: Optional[str] = None
 
     @property
     def llm_client(self) -> DTAProxyClient:
@@ -151,8 +159,28 @@ Avaliar a qualidade de um documento MIT041 (Desenho da Solucao / Blueprint) e at
 5. Considere as descricoes de diagramas BPMN na avaliacao do Pilar 2
 6. Responda APENAS com o JSON, sem texto adicional"""
 
+    def _get_reference_section(self) -> str:
+        """Get reference examples section for the prompt."""
+        if not self.use_references:
+            return ""
+
+        if self._reference_prompt is None:
+            try:
+                self._reference_prompt = get_reference_prompt(
+                    mit_type="mit41",
+                    max_excerpts=6,
+                    max_chars=8000,
+                )
+                if self._reference_prompt:
+                    logger.info("Loaded reference examples from good MIT samples")
+            except Exception as e:
+                logger.warning(f"Failed to load reference examples: {e}")
+                self._reference_prompt = ""
+
+        return self._reference_prompt
+
     def get_user_prompt(self, extraction: ExtractionResult | dict) -> str:
-        """Build user prompt with document content."""
+        """Build user prompt with document content and reference examples."""
         if isinstance(extraction, dict):
             markdown = extraction.get("markdown", "")
             diagrams = extraction.get("diagrams", [])
@@ -163,20 +191,24 @@ Avaliar a qualidade de um documento MIT041 (Desenho da Solucao / Blueprint) e at
         # Build diagrams section if available
         diagrams_section = ""
         if diagrams:
-            diagrams_section = "\n\n## DESCRICAO DOS DIAGRAMAS BPMN\n"
+            diagrams_section = "\n\n## DESCRICAO DAS IMAGENS/DIAGRAMAS\n"
             for d in diagrams:
-                diagrams_section += f"\n### Diagrama {d.get('index', 0) + 1}"
+                diagrams_section += f"\n### Imagem {d.get('index', 0) + 1}"
                 if d.get("diagram_type"):
                     diagrams_section += f" ({d['diagram_type']})"
                 diagrams_section += f"\n{d.get('description', 'Sem descricao')}\n"
+
+        # Get reference examples
+        reference_section = self._get_reference_section()
 
         return f"""## DOCUMENTO MIT041 PARA AVALIACAO
 
 {markdown}
 {diagrams_section}
-
+{reference_section}
 ## INSTRUCAO
-Avalie este documento MIT041 e retorne APENAS um JSON com score e recommendations."""
+Avalie este documento MIT041 comparando com os exemplos de referencia (quando disponiveis).
+Retorne APENAS um JSON com score e recommendations."""
 
     def evaluate(
         self,
@@ -203,20 +235,44 @@ Avalie este documento MIT041 e retorne APENAS um JSON com score e recommendation
         system_prompt = self.get_system_prompt()
         user_prompt = self.get_user_prompt(extraction)
 
-        # Call LLM
+        # Call LLM with JSON mode for guaranteed valid JSON response
         logger.info("Sending document to LLM for evaluation...")
         try:
-            response = self.llm_client.chat_completion(
+            llm_response = self.llm_client.chat_completion_with_metadata(
                 system_prompt=system_prompt,
                 user_content=user_prompt,
                 temperature=0.3,
-                max_tokens=2000,
+                max_tokens=settings.llm_max_tokens,
+                json_mode=settings.llm_json_mode,
             )
-        except Exception as e:
+
+            # Check if response was truncated
+            if llm_response.finish_reason == "length":
+                logger.warning(
+                    f"LLM response was truncated (max_tokens={settings.llm_max_tokens}). "
+                    "Consider increasing LLM_MAX_TOKENS in .env"
+                )
+                return EvaluationResult(
+                    score=0.0,
+                    recommendations=[
+                        "Resposta da avaliacao foi truncada por limite de tokens. "
+                        "Aumente LLM_MAX_TOKENS no arquivo .env (valor atual: "
+                        f"{settings.llm_max_tokens})."
+                    ],
+                )
+
+            response = llm_response.content
+        except DTAError as e:
             logger.error(f"LLM call failed: {e}")
             return EvaluationResult(
                 score=0.0,
                 recommendations=[f"Erro ao avaliar documento: {str(e)}"],
+            )
+        except Exception as e:
+            logger.error(f"Unexpected error during LLM call: {e}")
+            return EvaluationResult(
+                score=0.0,
+                recommendations=[f"Erro inesperado ao avaliar documento: {str(e)}"],
             )
 
         # Parse response
