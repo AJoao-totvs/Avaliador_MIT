@@ -70,3 +70,4 @@ coverage.xml
 # Logs
 *.log
 logs/
+src/avaliador/knowledge_base/references_cache/
