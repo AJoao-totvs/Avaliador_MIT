@@ -1,25 +1,42 @@
-Voce esta analisando um diagrama de processo de uma documentacao de implantacao de ERP TOTVS Protheus.
+Voce esta analisando uma imagem extraida de uma documentacao de implantacao de ERP TOTVS Protheus (MIT041 - Desenho da Solucao).
 
-ANALISE O DIAGRAMA E FORNECA:
+PRIMEIRO, IDENTIFIQUE O TIPO DE CONTEUDO:
+- DIAGRAMA DE PROCESSO (BPMN, Fluxograma, Swimlane)
+- TABELA (dados estruturados, matriz, grade)
+- CAPTURA DE TELA (interface do sistema, configuracao)
+- ORGANOGRAMA (estrutura hierarquica)
+- OUTRO (descreva)
 
-1. **TIPO DE DIAGRAMA**: (Fluxograma simples / BPMN / Swimlane / Outro)
+DEPOIS, EXTRAIA TODO O CONTEUDO VISIVEL COM MAXIMO DETALHE:
 
-2. **ESTRUTURA**:
-   - Evento de inicio: [Sim/Nao] - Descricao se houver
-   - Evento de fim: [Sim/Nao] - Descricao se houver
-   - Gateways de decisao: [Quantidade] - Liste as condicoes se visiveis
+## SE FOR DIAGRAMA DE PROCESSO:
+1. **TIPO**: Fluxograma simples / BPMN / Swimlane / Outro
+2. **EVENTOS**: Inicio e fim identificados? Quais?
+3. **GATEWAYS**: Quantos? Quais condicoes de decisao?
+4. **RAIAS/RESPONSAVEIS**: Quais atores/departamentos?
+5. **ATIVIDADES**: Liste TODAS as tarefas visiveis
+6. **FLUXO**: Sequencia logica clara? Conexoes quebradas?
 
-3. **RESPONSAVEIS** (se houver swimlanes/raias):
-   - Liste os atores/departamentos identificados
+## SE FOR TABELA:
+1. **CABECALHOS**: Liste todas as colunas
+2. **DADOS**: Transcreva TODO o conteudo visivel linha por linha
+3. **ESTRUTURA**: Quantas linhas e colunas?
+4. **CONTEXTO**: O que a tabela representa? (GAPs, criterios, aprovadores, etc.)
 
-4. **ATIVIDADES PRINCIPAIS**:
-   - Liste as principais tarefas/atividades do fluxo (maximo 10)
+## SE FOR CAPTURA DE TELA:
+1. **SISTEMA/MODULO**: Qual tela do Protheus?
+2. **CAMPOS VISIVEIS**: Liste todos os campos e seus valores
+3. **CONFIGURACOES**: Parametros ou opcoes selecionadas
+4. **CONTEXTO**: O que esta sendo demonstrado?
 
-5. **FLUXO LOGICO**:
-   - O fluxo tem sequencia logica clara? [Sim/Parcial/Nao]
-   - Ha conexoes quebradas ou ambiguas? [Sim/Nao]
+## SE FOR ORGANOGRAMA OU OUTRO:
+1. **ESTRUTURA**: Descreva a hierarquia ou organizacao visual
+2. **ELEMENTOS**: Liste todos os componentes visiveis
+3. **RELACOES**: Como os elementos se conectam?
 
-6. **QUALIDADE GERAL**: [Alta/Media/Baixa]
-   - Justificativa em uma frase
-
-Seja objetivo e conciso. Foque em elementos auditaveis.
+IMPORTANTE:
+- Extraia TODOS os textos visiveis na imagem
+- Nao resuma - transcreva o conteudo completo
+- Se houver dados em tabela, liste TODAS as linhas
+- Informacoes parcialmente visiveis devem ser indicadas com [parcial]
+- Seja exaustivo na extracao de informacoes
